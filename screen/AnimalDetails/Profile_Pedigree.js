@@ -1503,7 +1503,7 @@ export default class Profile_Pedigree extends React.Component {
                       style={styles.fieldBox}
                       onPress={this.openSearchModal.bind(this, "mother")}
                     >
-                      <Text style={styles.labelName}>Mother:</Text>
+                      <Text style={styles.labelName}>Mother :</Text>
                       <TextInput
                         editable={false}
                         value={this.state.mother}

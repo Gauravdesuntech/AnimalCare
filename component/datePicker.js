@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 	textInputIcon: {
 		position: "absolute",
 		bottom: 14,
-		right: 10,
+		right: 16,
 		marginLeft: 8,
 		color: Colors.primary,
 		zIndex: 99,
