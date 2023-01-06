@@ -694,7 +694,7 @@ export default class AddUserPermission extends React.Component {
 
             <View style={{ padding: 10 }}>
               <Text style={[globalStyles.labelName, { marginBottom: 0 }]}>
-                Journal Review:
+                Journal Review :
               </Text>
               <View
                 style={{

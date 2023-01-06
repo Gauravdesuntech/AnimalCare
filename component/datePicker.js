@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 		fontSize: 12,
 		color: Colors.textColor,
 		position: "absolute",
-		right: 35,
+		right: 80,
 		bottom: 0,
 	},
 	labelName: {
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 	textInputIcon: {
 		position: "absolute",
 		bottom: 14,
-		right: 16,
+		right: 50,
 		marginLeft: 8,
 		color: Colors.primary,
 		zIndex: 99,

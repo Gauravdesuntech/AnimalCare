@@ -2,127 +2,203 @@
 // Created on 4/01/2023
 
 
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, } from 'react-native';
 import React, { useState } from 'react';
-
-import { DatePicker } from "../../component";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
+import Colors from "../../config/colors";
+import styles from "../../config/Styles";
+import Configs from "../../config/Configs";
+import { DateTimePickerModal } from 'react-native-modal-datetime-picker';
+import { DatePicker, InputDropdown } from "../../component";
 
 const IdentificationDetail = () => {
     const [show, setShow] = useState(false);
-    const [dob,setDob]=useState(new Date())
-    const [dobSelected,setDobSelected]=useState(false)
-    const [approxDOBSelected,setApproxDOBSelected]=useState(false)
-    // const [sourceDate, setSourceDate] = useState(
-    //     data.source_date !== null ?
-    //         new Date(data.source_date) : new Date(),)
+    const [dob, setDob] = useState(new Date());
+    const [type, setType] = useState("");
+    const [identificationType, setIdentificationType] = useState("");
+    const [isIdentificationTypeMenuOpen, setIsIdentificationTypeMenuOpen] = useState(false);
 
-    const ShowDatePicker = () => {
+
+
+
+    const ShowDatePicker = (type) => {
         setShow(true)
+        setType(type)
     }
 
-    onChangeDate = (event, selectedDate) => {
-        const currentDate = selectedDate || dob;
-        setShow(false)
-        setDob(currentDate)
-        setDobSelected(true)
-        setApproxDOBSelected(false)
-    };
+    const handleConfirm = (selectDate) => {
+        const currentDate = selectDate || dob;
+        if (type == 'dob') {
+            setDob(currentDate)
+        }
+        hideDatePicker();
+    }
 
-    // onChangeSourceDate = (event, selectedDate) => {
-    //     const currentDate = selectedDate || this.state.dob;
-    //     setSourceDate(currentDate)
-    //     setDatePicker(false)
-    // };
+    const hideDatePicker = () => {
+        setShow(false)
+    }
+
+    const HandleSetIdentificationType = (v) => {
+        setIdentificationType(v.value);
+        setIsIdentificationTypeMenuOpen(false);
+    }
+    const toggleIdentificationTypeMenu = () => {
+        setIsIdentificationTypeMenuOpen(!isIdentificationTypeMenuOpen)
+    };
 
 
     return (
+        <>
+            <View style={style.mainContainer}>
 
-        <View style={styles.mainContainer}>
-
-            {/* <View style={styles.inputContainer}>
-                <Text style={styles.labels}>Date In :
-                    <TouchableOpacity activeOpacity={1} style={[{ flexDirection: 'row', alignItems: 'center', width: '50%' }]} onPress={() => showDatePicker(datePicker) }>
+                <View style={[styles.fieldBox]}>
+                    <Text style={styles.labelName}>Date Of Birth: </Text>
+                    <TouchableOpacity activeOpacity={1} style={{ flexDirection: 'row', alignItems: 'center', width: '50%' }} onPress={() => { ShowDatePicker("dob") }}>
+                        <Text style={styles.dateField}>{dob.toDateString()}</Text>
                         <AntDesign name="calendar" color={Colors.primary} size={20} />
                     </TouchableOpacity>
-                </Text>
-                <TextInput style={styles.inputstyle} autoCapitalize='none'></TextInput>
-            </View> */}
+                </View>
 
-            <View style={styles.inputContainer}>
-                <DatePicker
-                    onPress={ShowDatePicker}
-                    show={show}
-                    onChange={onChangeDate}
-                    mode={"date"}
-                    Date={dob}
+                <View style={style.inputContainer}>
+                    <Text style={style.labels}>Entity ID :</Text>
+                    <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
+                </View>
+                <InputDropdown
+                    label={"Class:"}
+                    value={identificationType}
+                    isOpen={isIdentificationTypeMenuOpen}
+                    items={Configs.ANIMAL_IDENTIFICATION_TYPES}
+                    openAction={toggleIdentificationTypeMenu}
+                    closeAction={toggleIdentificationTypeMenu}
+                    setValue={HandleSetIdentificationType}
+                    labelStyle={styles.labelName}
+                    textFieldStyle={[styles.textfield, identificationType ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                    style={[
+                        styles.fieldBox,
+                        //     isIdentificationTypeValidationFailed
+                        //   ? styles.errorFieldBox
+                        //   : null,
+                    ]}
                 />
-                <Text style={styles.date_box}>Date IN :</Text>
+                <InputDropdown
+                    label={"Categroy:"}
+                    value={identificationType}
+                    isOpen={isIdentificationTypeMenuOpen}
+                    items={Configs.ANIMAL_IDENTIFICATION_TYPES}
+                    openAction={toggleIdentificationTypeMenu}
+                    closeAction={toggleIdentificationTypeMenu}
+                    setValue={HandleSetIdentificationType}
+                    labelStyle={styles.labelName}
+                    textFieldStyle={[styles.textfield, identificationType ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                    style={[
+                        styles.fieldBox,
+                        //     isIdentificationTypeValidationFailed
+                        //   ? styles.errorFieldBox
+                        //   : null,
+                    ]}
+                />
+                <InputDropdown
+                    label={"Sub Categroy:"}
+                    value={identificationType}
+                    isOpen={isIdentificationTypeMenuOpen}
+                    items={Configs.ANIMAL_IDENTIFICATION_TYPES}
+                    openAction={toggleIdentificationTypeMenu}
+                    closeAction={toggleIdentificationTypeMenu}
+                    setValue={HandleSetIdentificationType}
+                    labelStyle={styles.labelName}
+                    textFieldStyle={[styles.textfield, identificationType ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                    style={[
+                        styles.fieldBox,
+                        //     isIdentificationTypeValidationFailed
+                        //   ? styles.errorFieldBox
+                        //   : null,
+                    ]}
+                />
+                <InputDropdown
+                    label={"Common Name:"}
+                    value={identificationType}
+                    isOpen={isIdentificationTypeMenuOpen}
+                    items={Configs.ANIMAL_IDENTIFICATION_TYPES}
+                    openAction={toggleIdentificationTypeMenu}
+                    closeAction={toggleIdentificationTypeMenu}
+                    setValue={HandleSetIdentificationType}
+                    labelStyle={styles.labelName}
+                    textFieldStyle={[styles.textfield, identificationType ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                    style={[
+                        styles.fieldBox,
+                        //     isIdentificationTypeValidationFailed
+                        //   ? styles.errorFieldBox
+                        //   : null,
+                    ]}
+                />
+                <View style={style.inputContainer}>
+                    <Text style={style.labels}>Scientific Name :</Text>
+                    <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
+                </View>
+                <View style={style.inputContainer}>
+                    <Text style={style.labels}>Entity Type :</Text>
+                    <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
+                </View>
+                <InputDropdown
+                    label={"Collection Type :"}
+                    value={identificationType}
+                    isOpen={isIdentificationTypeMenuOpen}
+                    items={Configs.ANIMAL_IDENTIFICATION_TYPES}
+                    openAction={toggleIdentificationTypeMenu}
+                    closeAction={toggleIdentificationTypeMenu}
+                    setValue={HandleSetIdentificationType}
+                    labelStyle={styles.labelName}
+                    textFieldStyle={[styles.textfield, identificationType ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                    style={[
+                        styles.fieldBox,
+                        //     isIdentificationTypeValidationFailed
+                        //   ? styles.errorFieldBox
+                        //   : null,
+                    ]}
+                />
+                <InputDropdown
+                    label={"Sex :"}
+                    value={identificationType}
+                    isOpen={isIdentificationTypeMenuOpen}
+                   // items={Configs.ANIMAL_IDENTIFICATION_TYPES}
+                    openAction={toggleIdentificationTypeMenu}
+                    closeAction={toggleIdentificationTypeMenu}
+                    setValue={HandleSetIdentificationType}
+                    labelStyle={styles.labelName}
+                    textFieldStyle={[styles.textfield, identificationType ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                    style={[
+                        styles.fieldBox,
+                        //     isIdentificationTypeValidationFailed
+                        //   ? styles.errorFieldBox
+                        //   : null,
+                    ]}
+                />
+                
+                <View style={style.inputContainer}>
+                    <Text style={style.labels}>Given Name :</Text>
+                    <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
+                </View>
+                <View style={style.inputContainer}>
+                    <Text style={style.labels}>Identifications :</Text>
+                    <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
+                </View>
+                <View style={style.inputContainer}>
+                    <Text style={style.labels}>Govt Reg # :</Text>
+                    <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
+                </View>
             </View>
-
-            <View style={styles.inputContainer}>
-                <Text style={styles.labels}>Entity ID :</Text>
-                <TextInput style={styles.inputstyle} paddingHorizontal={110} autoCapitalize='none'></TextInput>
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.labels}>Class :</Text>
-                <TextInput style={styles.inputstyle} paddingHorizontal={120} autoCapitalize='none'></TextInput>
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.labels}>Categroy :</Text>
-                <TextInput style={styles.inputstyle} paddingHorizontal={150} autoCapitalize='none'></TextInput>
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.labels}>Sub Category :</Text>
-                <TextInput style={styles.inputstyle} paddingHorizontal={110} autoCapitalize='none'></TextInput>
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.labels}>Common Name :</Text>
-                <TextInput style={styles.inputstyle} paddingHorizontal={110} autoCapitalize='none'></TextInput>
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.labels}>Scientific Name :</Text>
-                <TextInput style={styles.inputstyle} paddingHorizontal={110} autoCapitalize='none'></TextInput>
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.labels}>Entity Type :</Text>
-                <TextInput style={styles.inputstyle} paddingHorizontal={110} autoCapitalize='none'></TextInput>
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.labels}>Collection Type :</Text>
-                <TextInput style={styles.inputstyle} paddingHorizontal={110} autoCapitalize='none'></TextInput>
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.labels}>Sex :</Text>
-                <TextInput style={styles.inputstyle} paddingHorizontal={110} autoCapitalize='none'></TextInput>
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.labels}>Hybrid :</Text>
-                <TextInput style={styles.inputstyle} paddingHorizontal={110} autoCapitalize='none'></TextInput>
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.labels}>Given Name :</Text>
-                <TextInput style={styles.inputstyle} paddingHorizontal={110} autoCapitalize='none'></TextInput>
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.labels}>Identifications :</Text>
-                <TextInput style={styles.inputstyle} paddingHorizontal={110} autoCapitalize='none'></TextInput>
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.labels}>Govt Reg # :</Text>
-                <TextInput style={styles.inputstyle} paddingHorizontal={110} autoCapitalize='none'></TextInput>
-            </View>
-        </View>
-        //     <DateTimePickerModal
-        //     mode={'date'}
-        //     display={Platform.OS == 'ios' ? 'inline' : 'default'}
-        //     isVisible={this.state.show}
-        //     onConfirm={this.handleConfirm}
-        //     onCancel={this.hideDatePicker}
-        //   />
+            <DateTimePickerModal
+                mode={'date'}
+                display={Platform.OS == 'ios' ? 'inline' : 'default'}
+                isVisible={show}
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+            />
+        </>
     )
 };
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
 
     mainContainer: {
         width: "auto",
@@ -130,69 +206,31 @@ const styles = StyleSheet.create({
         borderColor: "black",
         alignItems: "baseline",
     },
-    // mainBox: {
-    //     height: "auto",
-    //     width: "100%",
-    //     backgroundColor: 'green',
-    // },
-    // mainHeading: {
-    //     borderWidth:1,
-    //     paddingHorizontal: 30,
-    //     padding:20,
-    //     fontSize: 21,
-    //     color: "white"
-    // },
 
-    // second_Box: {
-    //     width: "100%",
-    //     borederWidth: 10,
-    //     borderColor:"black",
-    //     marginVertical: -1,
-    //     paddingHorizontal:9,
-    // },
-
-    // identification_Box: {
-    //     backgroundColor: "green",
-    //     width:"45%",
-    //     color:"white",
-    //     borderRadius:3,
-    //     padding:5,
-    //     fontSize:13,
-    //     fontWeight:"bold",
-    //     paddingVertical:3,
-    //     marginVertical:35,
-    // },
 
     inputContainer: {
         width: "100%",
     },
 
     labels: {
-        paddingHorizontal: 2,
         position: "absolute",
-        top: -23,
+        top: 9,
         left: 10,
-        fontSize: 20,
+        fontSize: Colors.lableSize,
     },
 
     inputstyle: {
         position: "relative",
-        top: -32,
+        top: -1,
         left: 0,
-        padding: 8,
+        padding: 7,
         paddingLeft: 80,
-        fontWeight:"10%",
+        fontWeight: "bold",
         width: "100%",
         borderWidth: 0.8,
         borderColor: "#ddd",
     },
-    date_box:{
-         position:"relative",
-         top:-43,
-         left:12,
-         fontSize:19,
-         fontWeight:"10%",
-    },
+
 })
 
 export default IdentificationDetail;
