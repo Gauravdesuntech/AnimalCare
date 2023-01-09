@@ -150,6 +150,7 @@ export default class AddUserPermission extends React.Component {
   }
 
   componentDidMount = () => {
+    
     let cid = this.context.userDetails.cid;
     let methods = [
       getAnimalGroups(cid),
