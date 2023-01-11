@@ -78,7 +78,7 @@ export default class AnimalsData extends React.Component {
 				</Tab>
 
 				<Tab
-					heading="Indefication Details"
+					heading="Identification Details"
 					tabStyle={styles.inActiveTab}
 					textStyle={styles.inActiveText}
 					activeTabStyle={styles.activeTab}

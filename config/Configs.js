@@ -408,6 +408,7 @@ const Configs = {
     { id: "pending", name: "Pending", value: "pending" },
     { id: "overdue", name: "Over Due", value: "over_due_task" },
   ],
+  
   PRIORITY_FOR_CATEGORY_ADD: [
     {
       id: "1",
@@ -449,6 +450,40 @@ const Configs = {
       value: "hi",
     },
   ],
+
+//===> IdentificationDetails  inuptfiled data==>
+  
+SEX: [
+  { id: "Male", name: "Male", value: "Male" },
+  { id: "Female", name: "Female", value: "Female" },
+  { id: "Undetermined", name: "Undetermined", value: "Undetermined" },
+  { id: "Indeterminate", name: "Indeterminate", value: "Indeterminate" },
+  { id: "Asexual", name: "Asexual", value: "Asexual" },
+  { id: "Hermaphrodite", name: "Hermaphrodite", value: "Hermaphrodite" },
+],
+
+ENTITY_TYPE_TAB_MENU: [
+  { id: "Individual", name: "Individual", value:"Individual" },
+  { id: "Group", name: "Group", value: "Group" },
+],
+COLLECTION_TYPE_TAB_MENU:[
+  { id: "Exhibition", name: "Exhibition", value:"Exhibition" },
+  { id: "Examination", name: "Examination", value:"Examination" },
+  { id: "Rehab", name: "Rehab", value:"Rehab" },
+  { id: "Rescue", name: "Rescue", value:"Rescue" },
+  { id: "Wild Observation", name: "Wild Observation", value:"Wild Observation" },
+],
+HYBRID_TYPE_TAB_MENU:[
+  { id: "Not a Hybrid", name: "Not a Hybrid", value:"Not a Hybrid" },
+  { id: "Species Hybrid", name: "Species Hybrid", value:"Species Hybrid" },
+  { id: "Sub Species Hybrid", name: "Sub Species Hybrid", value:"Sub Species Hybrid" },
+  { id: "Unknown", name: "Unknown", value:"Unknown" },
+],
+ Select_Section:[ 
+  { id: "Ring Number", name :"Ring Number", value:"Ring Number" },
+  { id: "DNA", name: "DNA", value:"DNA" },
+  { id: "Microchip", name: "Microchip", value:"Microchip" },
+],
 };
 
 export default Configs;

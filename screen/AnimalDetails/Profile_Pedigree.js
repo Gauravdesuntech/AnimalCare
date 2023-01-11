@@ -1368,7 +1368,7 @@ export default class Profile_Pedigree extends React.Component {
                   ]}
                 />
 
-                { this.state.identificationType === "DNA" ||
+                {this.state.identificationType === "DNA" ||
                   this.state.identificationType === "DNA-Microchip" ||
                   this.state.identificationType === "DNA-Ring Number" ||
                   this.state.identificationType === "DNA-Microchip-Ring Number" ? (
@@ -1413,7 +1413,7 @@ export default class Profile_Pedigree extends React.Component {
                       </TouchableOpacity>
                     </View>
                   </>
-                ) : null }
+                ) : null}
 
                 {this.state.identificationType === "Microchip" ||
                   this.state.identificationType === "DNA-Microchip" ||
@@ -1428,7 +1428,7 @@ export default class Profile_Pedigree extends React.Component {
                     ]}
                   >
                     <Text style={styles.labelName}>
-                     Microchip :
+                      Microchip :
                     </Text>
                     <TextInput
                       value={this.state.microchip}
