@@ -21,6 +21,7 @@ import { Header } from "../component";
 import AppContext from "../context/AppContext";
 import Profile_Pedigree from "./AnimalDetails/Profile_Pedigree";
 import IdentificationDetail from "./AnimalDetails/IndentificationDetails";
+import SourceDetail from "./AnimalDetails/SourceDetail";
 import globalStyles from "../config/Styles";
 import styles from './Styles'
 
@@ -228,6 +229,16 @@ export default class AnimalsData extends React.Component {
 					) : (
 						this.errorMessage()
 					)}
+				</Tab>
+
+				<Tab
+					heading="Source Detail"
+					tabStyle={styles.inActiveTab}
+					textStyle={styles.inActiveText}
+					activeTabStyle={styles.activeTab}
+					activeTextStyle={styles.activeText}
+				>
+					<SourceDetail {...this.props} />
 				</Tab>
 			</Tabs>
 		</Container>

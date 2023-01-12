@@ -408,7 +408,11 @@ const styles = StyleSheet.create({
     fontSize: Colors.textSize,
   },
   buttonText: {
-    fontSize: 18,
+    position:"relative",
+    bottom:90,
+    left:0,
+    padding:20,
+    fontSize: 30,
     fontWeight: "bold",
   },
   saveBtnText: {

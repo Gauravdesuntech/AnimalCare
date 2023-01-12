@@ -2,13 +2,14 @@
 // Created on 4/01/2023
 
 
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import React, { useState, useEffect, useContext } from 'react';
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import Colors from "../../config/colors";
 import styles from "../../config/Styles";
 import Configs from "../../config/Configs";
 import { DateTimePickerModal } from 'react-native-modal-datetime-picker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { DatePicker, InputDropdown } from "../../component";
 import {
     getAnimalGroups,
@@ -17,6 +18,7 @@ import {
     getCommonNames,
 } from "../../services/APIServices";
 import AppContext from '../../context/AppContext';
+import { DataTable } from 'react-native-paper';
 
 const IdentificationDetail = () => {
     const [show, setShow] = useState(false);
@@ -48,8 +50,9 @@ const IdentificationDetail = () => {
     const [selectSectionType, setSelectSectionType] = useState("");
     const [isSelectSectionTypeMenuOpen, setIsSelectSectionTypeMenuOpen] = useState(false);
     const [showInputFiled, setShowInputFiled] = useState(false);
-    const [showSection, setShowSection] = useState([]);
-     const [searchValue, setSearchValue] = useState("");
+    const [searchValue, setSearchValue] = useState([]);
+    const [showTable, setShowTable] = useState(false);
+    const [showIdentification, setShowIdentification] = useState([])
 
     //===> this function for DatePicker ==>
     const ShowDatePicker = (type) => {
@@ -168,7 +171,7 @@ const IdentificationDetail = () => {
     //===> this function for Indetification Type==>
     const openSearchModal = () => {
         setIsIdentificationModalOpen(true)
-           setSearchValue("")
+        setSearchValue("")
         //   searchFor: searchFor,
         //       animalSectionName: undefined,
         //       animalEnclosures: [],
@@ -181,7 +184,7 @@ const IdentificationDetail = () => {
 
     const closeSearchModal = () => {
         setIsIdentificationModalOpen(false)
-           setSearchValue("")
+        setSearchValue("")
         //       searchFor: "",
         //       animalSectionName: undefined,
         //       animalEnclosures: [],
@@ -194,10 +197,12 @@ const IdentificationDetail = () => {
     //===> this function for the Cancel and Save Button==>
     const HandleSave = () => {
         setIsIdentificationModalOpen(false)
-        setShowSection(selectSectionType)
-        let value={  searchValue: searchValue}
-        console.log(value.searchValue,"vall===")
-        // setShowCodeValue(selectSectionType)
+        let value = { showSection: selectSectionType, searchValue: searchValue }
+        let arr = showIdentification;
+        arr.push(value);
+        setShowIdentification(arr)
+        console.log(showIdentification, "vall===")
+        setShowTable(true)
     };
 
     const HandleCancel = () => {
@@ -221,255 +226,271 @@ const IdentificationDetail = () => {
 
     return (
         <>
-            <View style={style.mainContainer}>
-                <View style={[styles.fieldBox]}>
-                    <Text style={styles.labelName}>Date Of Birth: </Text>
-                    <TouchableOpacity activeOpacity={1} style={{ flexDirection: 'row', alignItems: 'center', width: '50%' }} onPress={() => { ShowDatePicker("dob") }}>
-                        <Text style={styles.dateField}>{dob.toDateString()}</Text>
-                        <AntDesign name="calendar" color={Colors.primary} size={20} />
-                    </TouchableOpacity>
-                </View>
+            <KeyboardAwareScrollView extraHeight={"auto"}>
+                <View style={style.mainContainer}>
+                    <View style={[styles.fieldBox]}>
+                        <Text style={styles.labelName}>Date Of Birth: </Text>
+                        <TouchableOpacity activeOpacity={1} style={{ flexDirection: 'row', alignItems: 'center', width: '50%' }} onPress={() => { ShowDatePicker("dob") }}>
+                            <Text style={styles.dateField}>{dob.toDateString()}</Text>
+                            <AntDesign name="calendar" color={Colors.primary} size={20} />
+                        </TouchableOpacity>
+                    </View>
 
-                <View style={style.inputContainer}>
-                    <Text style={style.labels}>Entity ID :</Text>
-                    <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
-                </View>
+                    <View style={style.inputContainer}>
+                        <Text style={style.labels}>Entity ID :</Text>
+                        <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
+                    </View>
 
-                <InputDropdown
-                    label={"Class :"}
-                    items={animalGroups}
-                    isMandatory={true}
-                    value={animalGroupsType}
-                    isOpen={isAnimalsGroupsTypeMenuOpen}
-                    openAction={toggleAnimalGroupsTypeMenu}
-                    closeAction={toggleAnimalGroupsTypeMenu}
-                    setValue={HandleSetAnimalGroupsType}
-                    labelStyle={styles.labelName}
-                    textFieldStyle={[styles.textfield, animalGroupsType ? [styles.width50, { paddingLeft: 0 }] : null,]}
-                    style={[
-                        styles.fieldBox
-                    ]}
-                />
-
-
-                <InputDropdown
-                    label={"Category :"}
-                    items={category}
-                    isMandatory={true}
-                    value={categoryType}
-                    isOpen={iscategoryTypeMenuOpen}
-                    openAction={toggleCategoryTypeMenu}
-                    closeAction={toggleCategoryTypeMenu}
-                    setValue={HandleSetCategoryType}
-                    labelStyle={styles.labelName}
-                    textFieldStyle={[styles.textfield, categoryType ? [styles.width50, { paddingLeft: 0 }] : null,]}
-                    style={styles.fieldBox}
-                />
-
-                <InputDropdown
-                    label={" SubCategory :"}
-                    items={subCategory}
-                    isMandatory={true}
-                    value={subCategoryType}
-                    isOpen={isSubCategoryTypeMenuOpen}
-                    openAction={toggleSubCategoryTypeMenu}
-                    closeAction={toggleSubCategoryTypeMenu}
-                    setValue={HandleSetSubCategoryType}
-                    labelStyle={styles.labelName}
-                    textFieldStyle={[styles.textfield, subCategoryType ? [styles.width50, { paddingLeft: 0 }] : null,]}
-                    style={styles.fieldBox}
-                />
-
-                <InputDropdown
-                    label={" Common Name:"}
-                    items={commonName}
-                    isMandatory={true}
-                    value={commonNameType}
-                    isOpen={isCommonNameTypeMenuOpen}
-                    openAction={toggleCommonNameTypeMenu}
-                    closeAction={toggleCommonNameTypeMenu}
-                    setValue={HandleSetCommonType}
-                    labelStyle={styles.labelName}
-                    textFieldStyle={[styles.textfield, commonNameType ? [styles.width50, { paddingLeft: 0 }] : null,]}
-                    style={styles.fieldBox}
-
-                />
-
-
-                <View style={style.inputContainer}>
-                    <Text style={style.labels}>Scientific Name :</Text>
-                    <TextInput style={style.inputstyle} autoCapitalize='none' value={ScientificNameType}></TextInput>
-                </View>
-
-                <InputDropdown
-                    label={"Entity Type :"}
-                    value={entityType}
-                    isOpen={isEntityTypeMenuOpen}
-                    items={Configs.ENTITY_TYPE_TAB_MENU}
-                    openAction={toggleEntityTypeMenu}
-                    closeAction={toggleEntityTypeMenu}
-                    setValue={HandleSetEntityType}
-                    labelStyle={styles.labelName}
-                    textFieldStyle={[styles.textfield, entityType ? [styles.width50, { paddingLeft: 0 }] : null,]}
-                    style={styles.fieldBox}
-                />
-
-                <InputDropdown
-                    label={"Collection Type :"}
-                    value={collectionType}
-                    isOpen={isCollectionTypeMenuOpen}
-                    items={Configs.COLLECTION_TYPE_TAB_MENU}
-                    openAction={toggelCollectionTypeMenu}
-                    closeAction={toggelCollectionTypeMenu}
-                    setValue={HandleSetCollectionType}
-                    labelStyle={styles.labelName}
-                    textFieldStyle={[styles.textfield, collectionType ? [styles.width50, { paddingLeft: 0 }] : null,]}
-                    style={styles.fieldBox}
-                />
-
-                <InputDropdown
-                    label={"Sex :"}
-                    value={sexType}
-                    isOpen={isSexTypeMenuOpen}
-                    items={Configs.SEX}
-                    openAction={toggelSexTypeMenu}
-                    closeAction={toggelSexTypeMenu}
-                    setValue={HandleSetSexType}
-                    labelStyle={styles.labelName}
-                    textFieldStyle={[styles.textfield, sexType ? [styles.width50, { paddingLeft: 0 }] : null,]}
-                    style={styles.fieldBox}
-                />
-
-                <InputDropdown
-                    label={"Hybrid :"}
-                    value={hybridType}
-                    isOpen={isHybridTypeMenuOpen}
-                    items={Configs.HYBRID_TYPE_TAB_MENU}
-                    openAction={toggelHybridTypeMenu}
-                    closeAction={toggelHybridTypeMenu}
-                    setValue={HandleSetHybridType}
-                    labelStyle={styles.labelName}
-                    textFieldStyle={[styles.textfield, hybridType ? [styles.width50, { paddingLeft: 0 }] : null,]}
-                    style={styles.fieldBox}
-                />
-
-                <View style={style.inputContainer}>
-                    <Text style={style.labels}>Given Name :</Text>
-                    <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
-                </View>
-
-                <TouchableOpacity
-                    activeOpacity={1}
-                    style={styles.fieldBox}
-                    onPress={openSearchModal}
-                >
-                    <Text style={styles.labelName}>Identification :</Text>
-                    <TextInput
-                        editable={false}
-                        value={showSection}
-                        // onChangeText={() => setIdentification({ indetification })}
-                        style={[styles.textfield, { width: '50%' }]}
-                        autoCompleteType="off"
+                    <InputDropdown
+                        label={"Class :"}
+                        items={animalGroups}
+                        isMandatory={true}
+                        value={animalGroupsType}
+                        isOpen={isAnimalsGroupsTypeMenuOpen}
+                        openAction={toggleAnimalGroupsTypeMenu}
+                        closeAction={toggleAnimalGroupsTypeMenu}
+                        setValue={HandleSetAnimalGroupsType}
+                        labelStyle={styles.labelName}
+                        textFieldStyle={[styles.textfield, animalGroupsType ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                        style={[
+                            styles.fieldBox
+                        ]}
                     />
-                    <Ionicons name="add" size={26} color="black" style={style.ionicons} />
-                </TouchableOpacity>
 
-                <View style={style.inputContainer}>
-                    <Text style={style.labels}>Govt Reg # :</Text>
-                    <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
-                </View>
-            </View>
-            <DateTimePickerModal
-                mode={'date'}
-                display={Platform.OS == 'ios' ? 'inline' : 'default'}
-                isVisible={show}
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
-            />
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={isIdentificationModalOpen}
-            >
-                <View style={styles.searchModalOverlay}>
-                    <View style={styles.seacrhModalContainer}>
-                        <View style={styles.searchModalHeader}>
 
-                            <TouchableOpacity
-                                activeOpacity={1}
-                                style={styles.headerBackBtnContainer}
-                                onPress={closeSearchModal}
-                            >
-                                <Ionicons name="arrow-back" size={25} color={Colors.white} />
-                            </TouchableOpacity>
-                            <View style={styles.headerTitleContainer}>
-                                <Text
-                                    style={{
-                                        fontSize: Colors.headerSize,
-                                        color: Colors.white,
-                                    }}
-                                >
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={styles.searchModalBody}>
-                            <View
-                                style={styles.formBorder}
-                            >
-                                <InputDropdown
-                                    label={"Select Section:"}
-                                    value={selectSectionType}
-                                    isOpen={isSelectSectionTypeMenuOpen}
-                                    items={Configs.Select_Section}
-                                    openAction={toggelSelectSectionTypeMenu}
-                                    closeAction={toggelSelectSectionTypeMenu}
-                                    setValue={HandleSetSelectSectionType}
-                                    labelStyle={styles.labelName}
-                                    textFieldStyle={[styles.textfield, selectSectionType ? [styles.width50, { paddingLeft: 0 }] : null,]}
-                                    style={[styles.fieldBox]}
-                                />
-                                {showInputFiled == true ? (
-                                    <View style={[styles.fieldBox, {
-                                        borderRadius: 3,
-                                        borderColor: "#ddd",
-                                        borderTopWidth: 1, borderBottomWidth: 0
-                                    }]}>
-                                        <TextInput
-                                            autoCompleteType="off"
-                                            autoCapitalize="none"
-                                            placeholder={"Type Animal Code"}
-                                            value={searchValue}
-                                            style={[
-                                                styles.textfield,]}
-                                            onChangeText={(text) =>
-                                                setSearchValue(text)
-                                            }
-                                        />
-                                    </View>
-                                ) : null}
-                            </View>
-                        </View>
-                        <View
-                            style={{
-                                flexDirection: "row",
-                                justifyContent: "space-around",
-                            }}
-                        >
-                            <TouchableOpacity
-                                style={[styles.button, { width: "45%" }]}
-                            >
-                                <Text style={{ color: Colors.white, fontSize: Colors.lableSize, }} onPress={ HandleSave}>Save</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[styles.button, { width: "45%" }]}
-                            >
-                                <Text style={{ color: Colors.white, fontSize: Colors.lableSize, }} onPress={HandleCancel}>Cancel</Text>
-                            </TouchableOpacity>
-                        </View>
+                    <InputDropdown
+                        label={"Category :"}
+                        items={category}
+                        isMandatory={true}
+                        value={categoryType}
+                        isOpen={iscategoryTypeMenuOpen}
+                        openAction={toggleCategoryTypeMenu}
+                        closeAction={toggleCategoryTypeMenu}
+                        setValue={HandleSetCategoryType}
+                        labelStyle={styles.labelName}
+                        textFieldStyle={[styles.textfield, categoryType ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                        style={styles.fieldBox}
+                    />
+
+                    <InputDropdown
+                        label={" SubCategory :"}
+                        items={subCategory}
+                        isMandatory={true}
+                        value={subCategoryType}
+                        isOpen={isSubCategoryTypeMenuOpen}
+                        openAction={toggleSubCategoryTypeMenu}
+                        closeAction={toggleSubCategoryTypeMenu}
+                        setValue={HandleSetSubCategoryType}
+                        labelStyle={styles.labelName}
+                        textFieldStyle={[styles.textfield, subCategoryType ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                        style={styles.fieldBox}
+                    />
+
+                    <InputDropdown
+                        label={" Common Name:"}
+                        items={commonName}
+                        isMandatory={true}
+                        value={commonNameType}
+                        isOpen={isCommonNameTypeMenuOpen}
+                        openAction={toggleCommonNameTypeMenu}
+                        closeAction={toggleCommonNameTypeMenu}
+                        setValue={HandleSetCommonType}
+                        labelStyle={styles.labelName}
+                        textFieldStyle={[styles.textfield, commonNameType ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                        style={styles.fieldBox}
+
+                    />
+
+
+                    <View style={style.inputContainer}>
+                        <Text style={style.labels}>Scientific Name :</Text>
+                        <TextInput style={style.inputstyle} autoCapitalize='none' value={ScientificNameType}></TextInput>
+                    </View>
+
+                    <InputDropdown
+                        label={"Entity Type :"}
+                        value={entityType}
+                        isOpen={isEntityTypeMenuOpen}
+                        items={Configs.ENTITY_TYPE_TAB_MENU}
+                        openAction={toggleEntityTypeMenu}
+                        closeAction={toggleEntityTypeMenu}
+                        setValue={HandleSetEntityType}
+                        labelStyle={styles.labelName}
+                        textFieldStyle={[styles.textfield, entityType ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                        style={styles.fieldBox}
+                    />
+
+                    <InputDropdown
+                        label={"Collection Type :"}
+                        value={collectionType}
+                        isOpen={isCollectionTypeMenuOpen}
+                        items={Configs.COLLECTION_TYPE_TAB_MENU}
+                        openAction={toggelCollectionTypeMenu}
+                        closeAction={toggelCollectionTypeMenu}
+                        setValue={HandleSetCollectionType}
+                        labelStyle={styles.labelName}
+                        textFieldStyle={[styles.textfield, collectionType ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                        style={styles.fieldBox}
+                    />
+
+                    <InputDropdown
+                        label={"Sex :"}
+                        value={sexType}
+                        isOpen={isSexTypeMenuOpen}
+                        items={Configs.SEX}
+                        openAction={toggelSexTypeMenu}
+                        closeAction={toggelSexTypeMenu}
+                        setValue={HandleSetSexType}
+                        labelStyle={styles.labelName}
+                        textFieldStyle={[styles.textfield, sexType ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                        style={styles.fieldBox}
+                    />
+
+                    <InputDropdown
+                        label={"Hybrid :"}
+                        value={hybridType}
+                        isOpen={isHybridTypeMenuOpen}
+                        items={Configs.HYBRID_TYPE_TAB_MENU}
+                        openAction={toggelHybridTypeMenu}
+                        closeAction={toggelHybridTypeMenu}
+                        setValue={HandleSetHybridType}
+                        labelStyle={styles.labelName}
+                        textFieldStyle={[styles.textfield, hybridType ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                        style={styles.fieldBox}
+                    />
+
+                    <View style={style.inputContainer}>
+                        <Text style={style.labels}>Given Name :</Text>
+                        <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
+                    </View>
+
+                    <TouchableOpacity
+                        activeOpacity={1}
+                        style={styles.fieldBox}
+                        onPress={openSearchModal}
+                    >
+                        <Text style={styles.labelName}>Identification :</Text>
+                        <TextInput
+                            editable={false}
+                            //value={showSection}
+                            // onChangeText={() => setIdentification({ indetification })}
+                            style={[styles.textfield, { width: '50%' }]}
+                            autoCompleteType="off"
+                        />
+                        <Ionicons name="add" size={26} color="black" style={style.ionicons} />
+                    </TouchableOpacity>
+                    {showTable == true ? (
+                            <DataTable style={style.Table_container}>
+                                <DataTable.Header style={styles.tableHeader}>
+                                    <DataTable.Title> Section name</DataTable.Title>
+                                    <DataTable.Title>Code</DataTable.Title>
+                                </DataTable.Header>
+                                {showIdentification?.map((data, index) => {
+                                    return (
+                                        <DataTable.Row key={index}>
+                                            <DataTable.Cell>{data.showSection}</DataTable.Cell>
+                                            <DataTable.Cell>{data.searchValue}</DataTable.Cell>
+                                        </DataTable.Row>
+                                    );
+                                })}
+                            </DataTable>
+                        ) : null}
+
+                    <View style={style.inputContainer}>
+                        <Text style={style.labels}>Govt Reg # :</Text>
+                        <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
                     </View>
                 </View>
-            </Modal>
-
+                <DateTimePickerModal
+                    mode={'date'}
+                    display={Platform.OS == 'ios' ? 'inline' : 'default'}
+                    isVisible={show}
+                    onConfirm={handleConfirm}
+                    onCancel={hideDatePicker}
+                />
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={isIdentificationModalOpen}
+                >
+                    <View style={styles.searchModalOverlay}>
+                        <View style={styles.seacrhModalContainer}>
+                            <View style={styles.searchModalHeader}>
+                                <TouchableOpacity
+                                    activeOpacity={1}
+                                    style={styles.headerBackBtnContainer}
+                                    onPress={closeSearchModal}
+                                >
+                                    <Ionicons name="arrow-back" size={25} color={Colors.white} />
+                                </TouchableOpacity>
+                                <View style={styles.headerTitleContainer}>
+                                    <Text
+                                        style={{
+                                            fontSize: Colors.headerSize,
+                                            color: Colors.white,
+                                        }}
+                                    >
+                                    </Text>
+                                </View>
+                            </View>
+                            <View style={styles.searchModalBody}>
+                                <View
+                                    style={styles.formBorder}
+                                >
+                                    <InputDropdown
+                                        label={"Select Section:"}
+                                        value={selectSectionType}
+                                        isOpen={isSelectSectionTypeMenuOpen}
+                                        items={Configs.Select_Section}
+                                        openAction={toggelSelectSectionTypeMenu}
+                                        closeAction={toggelSelectSectionTypeMenu}
+                                        setValue={HandleSetSelectSectionType}
+                                        labelStyle={styles.labelName}
+                                        textFieldStyle={[styles.textfield, selectSectionType ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                                        style={[styles.fieldBox]}
+                                    />
+                                    {showInputFiled == true ? (
+                                        <View style={[styles.fieldBox, {
+                                            borderRadius: 3,
+                                            borderColor: "#ddd",
+                                            borderTopWidth: 1, borderBottomWidth: 0
+                                        }]}>
+                                            <TextInput
+                                                autoCompleteType="off"
+                                                autoCapitalize="none"
+                                                placeholder={"Type Code"}
+                                                value={searchValue}
+                                                style={[
+                                                    styles.textfield,]}
+                                                onChangeText={(text) =>
+                                                    setSearchValue(text)
+                                                }
+                                            />
+                                        </View>
+                                    ) : null}
+                                </View>
+                            </View>
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    justifyContent: "space-around",
+                                }}
+                            >
+                                <TouchableOpacity
+                                    style={[styles.button, { width: "45%" }]}
+                                >
+                                    <Text style={{ color: Colors.white, fontSize: Colors.lableSize, }} onPress={HandleSave}>Save</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.button, { width: "45%" }]}
+                                >
+                                    <Text style={{ color: Colors.white, fontSize: Colors.lableSize, }} onPress={HandleCancel}>Cancel</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+            </KeyboardAwareScrollView>
         </>
     )
 };
@@ -509,8 +530,10 @@ const style = StyleSheet.create({
     ionicons: {
         position: "relative",
         top: 2,
-        right: 230,
-    }
+        right: 180,
+    },
+ 
 })
 
 export default IdentificationDetail;
+
