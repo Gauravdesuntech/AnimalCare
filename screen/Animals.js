@@ -22,6 +22,7 @@ import AppContext from "../context/AppContext";
 import Profile_Pedigree from "./AnimalDetails/Profile_Pedigree";
 import IdentificationDetail from "./AnimalDetails/IndentificationDetails";
 import SourceDetail from "./AnimalDetails/SourceDetail";
+import Necropsy from "./AnimalDetails/Necropsy";
 import globalStyles from "../config/Styles";
 import styles from './Styles'
 
@@ -240,6 +241,17 @@ export default class AnimalsData extends React.Component {
 				>
 					<SourceDetail {...this.props} />
 				</Tab>
+
+                <Tab
+					heading="Necropsy"
+					tabStyle={styles.inActiveTab}
+					textStyle={styles.inActiveText}
+					activeTabStyle={styles.activeTab}
+					activeTextStyle={styles.activeText}
+				>
+					<Necropsy {...this.props} />
+				</Tab>
+
 			</Tabs>
 		</Container>
 	);

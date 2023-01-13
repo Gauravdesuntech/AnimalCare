@@ -484,6 +484,23 @@ HYBRID_TYPE_TAB_MENU:[
   { id: "DNA", name: "DNA", value:"DNA" },
   { id: "Microchip", name: "Microchip", value:"Microchip" },
 ],
+DATA:[
+  { id: "Purchase", name: "Purchase", value:"Purchase" },
+  { id: "Wild", name: "Wild", value:"Wild" },
+],
+//====Necropsy.js inputfiled data :-
+Histopathology:[
+  { id: "Yes", name: "Yes", value:"Yes" },
+  { id: "No", name: "No", value:"No" },
+],
+LAB_REQUEST:[
+  { id: "Yes", name: "Yes", value:"Yes" },
+  { id: "No", name: "No", value:"No" },
+],
+Measurements:[
+  { id: "Yes", name: "Yes", value:"Yes" },
+  { id: "No", name: "No", value:"No" },
+],
 };
 
 export default Configs;

@@ -1,23 +1,64 @@
-import React from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Modal, ScrollView } from 'react-native';
-import Colors from "../../config/colors";
+// Created By gaurav shukla
+// Created on 12/01/2023
 
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Modal, ScrollView, FlatList } from 'react-native';
+import Colors from "../../config/colors";
+import styles from "../../config/Styles";
+import { DatePicker, InputDropdown } from "../../component";
+import { Configs } from '../../config';
 const SourceDetail = () => {
+    const [sourceDetail, setSourceDetail] = useState("");
+    const [isSourceDetailTypeMenuOpen, setIsSourceDetailTypeMenuOpen] = useState(false);
+    const HandleSetSourceDetailType = (v) => {
+        setSourceDetail(v.name);
+        setIsSourceDetailTypeMenuOpen(false);
+    }
+    const toggleSourceDetailTypeMenu = () => {
+        setIsSourceDetailTypeMenuOpen(!isSourceDetailTypeMenuOpen)
+    };
+
     return (
         <>
-            <View style={style.mainContainer}>
-                <View style={style.inputContainer}>
-                    <Text style={style.labels}>Source  :</Text>
-                    <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
-                </View>
-                <View style={style.inputContainer}>
-                    <Text style={style.labels}>Institution  :</Text>
-                    <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
-                </View>
-                <View style={style.inputContainer}>
-                    <Text style={style.labels}>Former Entity ID  :</Text>
-                    <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
-                </View>
+            <View>
+                <InputDropdown
+                    label={"Source  :"}
+                    value={sourceDetail}
+                    isOpen={isSourceDetailTypeMenuOpen}
+                    items={Configs.DATA}
+                    openAction={toggleSourceDetailTypeMenu}
+                    closeAction={toggleSourceDetailTypeMenu}
+                    setValue={HandleSetSourceDetailType}
+                    labelStyle={styles.labelName}
+                    textFieldStyle={[styles.textfield, sourceDetail ? [styles.width50, { paddingLeft: 0 }] : null,]}
+                    style={[styles.fieldBox]}
+                />
+
+
+                {(sourceDetail === 'Wild') ?
+                    <>
+                        <View style={style.inputContainer}>
+                            <Text style={style.labels}>Location  :</Text>
+                            <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
+                        </View>
+                        <View style={style.inputContainer}>
+                            <Text style={style.labels}>Condition  while it was Found  :</Text>
+                            <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
+                        </View>
+                    </>
+                    :
+                    <>
+                        <View style={style.inputContainer}>
+                            <Text style={style.labels}>Institution  :</Text>
+                            <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
+                        </View>
+                        <View style={style.inputContainer}>
+                            <Text style={style.labels}>Former Entity ID  :</Text>
+                            <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
+                        </View>
+                    </>
+                }
+
                 <View style={style.inputContainer}>
                     <Text style={style.labels}>Purchase Bill # :</Text>
                     <TextInput style={style.inputstyle} autoCapitalize='none'></TextInput>
@@ -43,9 +84,9 @@ const SourceDetail = () => {
 const style = StyleSheet.create({
 
     mainContainer: {
-        position:"relative",
-        top:10,
-        left:0,
+        position: "relative",
+        bottom: 9,
+        left: 0,
         width: "auto",
         marginVertical: 10,
         borderColor: "black",

@@ -10,7 +10,7 @@ import styles from "../../config/Styles";
 import Configs from "../../config/Configs";
 import { DateTimePickerModal } from 'react-native-modal-datetime-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { DatePicker, InputDropdown } from "../../component";
+import { InputDropdown } from "../../component";
 import {
     getAnimalGroups,
     getAllCategory,
@@ -172,26 +172,10 @@ const IdentificationDetail = () => {
     const openSearchModal = () => {
         setIsIdentificationModalOpen(true)
         setSearchValue("")
-        //   searchFor: searchFor,
-        //       animalSectionName: undefined,
-        //       animalEnclosures: [],
-        //       parentEnclosureID: undefined,
-        //       parentEnclosureIDName: undefined,
-        //       isFetchingParent: true,
-        //       parentAnimals: [],
     };
-
-
     const closeSearchModal = () => {
         setIsIdentificationModalOpen(false)
         setSearchValue("")
-        //       searchFor: "",
-        //       animalSectionName: undefined,
-        //       animalEnclosures: [],
-        //       parentEnclosureID: undefined,
-        //       parentEnclosureIDName: undefined,
-        //       isFetchingParent: true,
-        //       parentAnimals: [],
     };
 
     //===> this function for the Cancel and Save Button==>
@@ -201,7 +185,7 @@ const IdentificationDetail = () => {
         let arr = showIdentification;
         arr.push(value);
         setShowIdentification(arr)
-        console.log(showIdentification, "vall===")
+        // console.log(showIdentification, "vall===")
         setShowTable(true)
     };
 
